@@ -72,6 +72,29 @@ df['SEASON'] = df['MONTH'].apply(get_season)
 #         return 'Summer'
 #     else:
 #         return 'Fall'
+
+st.markdown(
+    """
+    <style>
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: rgba(0, 0, 0, 0.7); /* Dark overlay for contrast */
+        border-radius: 12px; 
+        padding: 10px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        color: #ffffff; /* Text color */
+        font-size: 18px; /* Larger text */
+        font-weight: bold;
+        margin-right: 10px;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        background-color: rgba(255, 255, 255, 0.2); /* Hover effect */
+        border-radius: 8px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "Time Series Analysis",
     "Rajarata vs Victoriya Releases",

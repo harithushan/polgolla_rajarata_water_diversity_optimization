@@ -80,10 +80,10 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "Inflow vs Release Analysis"
 ])
 with tab1:
-    plot_time_series()
+    plot_time_series(df)
 
 with tab2:
-    plot_rajarata_vs_victoriya()
+    plot_rajarata_vs_victoriya(df)
 
 with tab3:
     plot_monthly_avg_releases()
@@ -91,12 +91,12 @@ with tab3:
     plot_monthly_inflow_vs_victoriya(df)
 
 with tab4:
-    plot_yearly_comparison()
+    plot_yearly_comparison(df)
 
 with tab5:
-    display_correlation_matrix()
+    display_correlation_matrix(df)
 with tab6:
-    plot_seasonal_releases()
+    plot_seasonal_releases(df)
 
 with tab7:
-    plot_inflow_vs_release()
+    plot_inflow_vs_release(df)

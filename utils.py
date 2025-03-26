@@ -2,9 +2,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.graph_objects as go
 import numpy as np
+import pandas as pd
 
 # Define plotting and analysis functions
-def plot_time_series():
+def plot_time_series(df):
     fig, axes = plt.subplots(4, 1, figsize=(16, 20))
     fig.suptitle('Polgolla Reservoir - Key Metrics Over Time', fontsize=16)
 
@@ -30,7 +31,7 @@ def plot_time_series():
     plt.tight_layout(rect=[0, 0, 1, 0.97])
     st.pyplot(fig)
 
-def plot_rajarata_vs_victoriya():
+def plot_rajarata_vs_victoriya(df):
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(df['DATE'], df['RAJARATA_POWER_RELEASE(MCM)'], label='Rajarata Power Release (MCM)', marker='o')
     ax.plot(df['DATE'], df['VICTORIYA_SPILLWAY_RELEASE(MCM)'], label='Victoriya Spillway Release (MCM)', marker='x')
@@ -191,7 +192,7 @@ def plot_monthly_inflow_vs_victoriya(df):
 #     )
 #     st.plotly_chart(fig)
     
-def plot_monthly_avg_releases():
+def plot_monthly_avg_releases(df):
     monthly_avg = df.groupby('MONTH')[['RAJARATA_POWER_RELEASE(MCM)', 'VICTORIYA_SPILLWAY_RELEASE(MCM)']].mean()
     fig, ax = plt.subplots(figsize=(10, 6))
     monthly_avg.plot(kind='bar', ax=ax)
@@ -202,7 +203,7 @@ def plot_monthly_avg_releases():
     plt.tight_layout()
     st.pyplot(fig)
 
-def plot_yearly_comparison():
+def plot_yearly_comparison(df):
     df_yearly = df.groupby('YEAR')[['RAJARATA_POWER_RELEASE(MCM)', 'VICTORIYA_SPILLWAY_RELEASE(MCM)']].sum().reset_index()
     fig, ax = plt.subplots(figsize=(14, 7))
     x = df_yearly['YEAR']
@@ -217,7 +218,7 @@ def plot_yearly_comparison():
     plt.tight_layout()
     st.pyplot(fig)
 
-def display_correlation_matrix():
+def display_correlation_matrix(df):
     correlation_matrix = df.select_dtypes(include=[np.number]).corr()
     fig, ax = plt.subplots(figsize=(10, 8))
     sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap='coolwarm', ax=ax)
@@ -226,7 +227,7 @@ def display_correlation_matrix():
     
     
     
-def plot_seasonal_releases():
+def plot_seasonal_releases(df):
     seasons = ['Maha', 'First Inter-Monsoon', 'Second Inter-Monsoon', 'Yala']
     seasonal_data = df.groupby(['YEAR', 'SEASON']).agg({
         'RAJARATA_POWER_RELEASE(MCM)': 'sum',
@@ -270,7 +271,7 @@ def plot_seasonal_releases():
         with cols[i % 2]:
             st.plotly_chart(fig)
 
-def plot_inflow_vs_release():
+def plot_inflow_vs_release(df):
     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
     # Inflow vs Rajarata Release

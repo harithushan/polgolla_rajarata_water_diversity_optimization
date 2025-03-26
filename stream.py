@@ -54,9 +54,9 @@ df['MONTH'] = df['MONTH'].astype(int)
 def get_season(month):
     if month in [3, 4]:
         return 'First Inter-Monsoon'
-    elif month in [5, 6, 7, 8]:
+    elif month in [5, 6, 7, 8, 9]:
         return 'Yala'
-    elif month in [9]:
+    elif month in [10, 11]:
         return 'Second Inter-Monsoon'
     else:
         return 'Maha'

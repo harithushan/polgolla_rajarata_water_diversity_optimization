@@ -15,6 +15,8 @@ from utils import(
 )
 
 st.set_page_config(page_title="Optimization of water diversity to Rajarata from Polgolla", page_icon="🌊", layout="wide")
+st.title("📊 Optimization of water diversity to Rajarata from Polgolla 🌊")
+    
 def add_background_image(image_path):
     with open(image_path, "rb") as image_file:
         encoded_image = base64.b64encode(image_file.read()).decode()
@@ -33,7 +35,7 @@ def add_background_image(image_path):
     )
 
 # Add a background image
-add_background_image('static\Polgolla-diversion-dam.png')
+add_background_image('static/Polgolla-diversion-dam.png')
 # Load your dataset
 @st.cache_data
 def load_data():
@@ -86,7 +88,7 @@ with tab2:
     plot_rajarata_vs_victoriya(df)
 
 with tab3:
-    plot_monthly_avg_releases()
+    plot_monthly_avg_releases(df)
     plot_monthly_inflow_vs_rajarata(df)
     plot_monthly_inflow_vs_victoriya(df)
 

@@ -35,7 +35,8 @@ def add_background_image(image_path):
     )
 
 # Add a background image
-add_background_image('static/Polgolla-diversion-dam.png')
+#add_background_image('static/Polgolla-diversion-dam.png')
+add_background_image('static/polgolla-dam-kandy-sri-lanka.jpg')
 # Load your dataset
 @st.cache_data
 def load_data():

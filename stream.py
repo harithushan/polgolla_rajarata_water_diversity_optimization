@@ -15,7 +15,8 @@ from utils import(
 )
 
 st.set_page_config(page_title="Optimization of water diversity to Rajarata from Polgolla", page_icon="🌊", layout="wide")
-st.title("📊 Optimization of water diversity to Rajarata from Polgolla 🌊")
+#st.title("📊 Optimization of water diversity to Rajarata from Polgolla 🌊")
+st.title("📊 Water Release Analysis: Addressing Water Distribution Challenges in the Rajarata District of Sri Lanka 🌊")
     
 def add_background_image(image_path):
     with open(image_path, "rb") as image_file:

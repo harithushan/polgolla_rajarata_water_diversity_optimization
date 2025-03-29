@@ -85,7 +85,7 @@ st.markdown(
 
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
     "Home",
-    "Time Series Analysis",
+    "Analysis over Time",
     "Rajarata vs Victoriya Releases",
     "Monthly Average Releases",
     "Yearly Comparison",

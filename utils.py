@@ -51,92 +51,214 @@ import plotly.graph_objects as go
 import pandas as pd
 import streamlit as st
 
-def plot_monthly_inflow_vs_rajarata(df):
-    """
-    Plots monthly inflow versus Rajarata Power Release over multiple years.
-    """
-    # Ensure 'DATE' is in datetime format
+def plot_inflow_vs_release_dam(df, year_range, release_col, title):
     df['DATE'] = pd.to_datetime(df['DATE'])
-    # Create a 'Year-Month' column
-    df['Year-Month'] = df['DATE'].dt.to_period('M')
+    df['Year'] = df['DATE'].dt.year
+    df['Month'] = df['DATE'].dt.month
+    df['Year-Month'] = df['DATE'].dt.strftime('%Y-%m')
 
-    # Initialize the figure
+    filtered_df = df[(df['Year'] >= year_range[0]) & (df['Year'] <= year_range[1])]
+
     fig = go.Figure()
 
-    # Loop through each year-month to add traces
-    for period in df['Year-Month'].unique():
-        period_data = df[df['Year-Month'] == period]
-        fig.add_trace(go.Scatter(
-            x=period_data['Year-Month'].astype(str),
-            y=period_data['INFLOW(MCM)'],
-            mode='lines+markers',
-            name=f'Inflow {period}'
-        ))
-        fig.add_trace(go.Scatter(
-            x=period_data['Year-Month'].astype(str),
-            y=period_data['RAJARATA_POWER_RELEASE(MCM)'],
-            mode='lines+markers',
-            name=f'Rajarata Release {period}',
-            line=dict(dash='dash')
-        ))
+    # Plot inflow data
+    fig.add_trace(go.Scatter(
+        x=filtered_df['Year-Month'],
+        y=filtered_df['INFLOW(MCM)'],
+        mode='lines+markers',
+        name='Inflow'
+    ))
 
-    # Update the layout
+    # Plot release data
+    fig.add_trace(go.Scatter(
+        x=filtered_df['Year-Month'],
+        y=filtered_df[release_col],
+        mode='lines+markers',
+        name=title.split('vs ')[-1].strip(),
+        line=dict(dash='dash')
+    ))
+
     fig.update_layout(
-        title='Monthly Inflow vs Rajarata Release (2000-2025)',
+        title=f'{title} ({year_range[0]}-{year_range[1]})',
         xaxis_title='Year-Month',
         yaxis_title='Volume (MCM)',
         template='plotly_dark',
         width=1000,
         height=700,
-        xaxis=dict(tickmode='array', tickvals=df['Year-Month'].astype(str).unique())
+        xaxis=dict(type='category', tickangle=45)
     )
 
-    # Display the plot
     st.plotly_chart(fig)
+# def plot_monthly_inflow_vs_rajarata(df):
+#     """
+#     Plots monthly inflow versus Rajarata Power Release over multiple years.
+#     """
+#     # Ensure 'DATE' is in datetime format
+#     df['DATE'] = pd.to_datetime(df['DATE'])
+#     # Create a 'Year-Month' column
+#     df['Year-Month'] = df['DATE'].dt.to_period('M')
 
-def plot_monthly_inflow_vs_victoriya(df):
+#     # Initialize the figure
+#     fig = go.Figure()
+
+#     # Loop through each year-month to add traces
+#     for period in df['Year-Month'].unique():
+#         period_data = df[df['Year-Month'] == period]
+#         fig.add_trace(go.Scatter(
+#             x=period_data['Year-Month'].astype(str),
+#             y=period_data['INFLOW(MCM)'],
+#             mode='lines+markers',
+#             name=f'Inflow {period}'
+#         ))
+#         fig.add_trace(go.Scatter(
+#             x=period_data['Year-Month'].astype(str),
+#             y=period_data['RAJARATA_POWER_RELEASE(MCM)'],
+#             mode='lines+markers',
+#             name=f'Rajarata Release {period}',
+#             line=dict(dash='dash')
+#         ))
+
+#     # Update the layout
+#     fig.update_layout(
+#         title='Monthly Inflow vs Rajarata Release (2000-2025)',
+#         xaxis_title='Year-Month',
+#         yaxis_title='Volume (MCM)',
+#         template='plotly_dark',
+#         width=1000,
+#         height=700,
+#         xaxis=dict(tickmode='array', tickvals=df['Year-Month'].astype(str).unique())
+#     )
+
+#     # Display the plot
+#     st.plotly_chart(fig)
+
+# def plot_monthly_inflow_vs_victoriya(df):
+#     """
+#     Plots monthly inflow versus Victoria Spillway Release over multiple years.
+#     """
+#     # Ensure 'DATE' is in datetime format
+#     df['DATE'] = pd.to_datetime(df['DATE'])
+#     # Create a 'Year-Month' column
+#     df['Year-Month'] = df['DATE'].dt.to_period('M')
+
+#     # Initialize the figure
+#     fig = go.Figure()
+
+#     # Loop through each year-month to add traces
+#     for period in df['Year-Month'].unique():
+#         period_data = df[df['Year-Month'] == period]
+#         fig.add_trace(go.Scatter(
+#             x=period_data['Year-Month'].astype(str),
+#             y=period_data['INFLOW(MCM)'],
+#             mode='lines+markers',
+#             name=f'Inflow {period}'
+#         ))
+#         fig.add_trace(go.Scatter(
+#             x=period_data['Year-Month'].astype(str),
+#             y=period_data['VICTORIYA_SPILLWAY_RELEASE(MCM)'],
+#             mode='lines+markers',
+#             name=f'Victoria Release {period}',
+#             line=dict(dash='dash')
+#         ))
+
+#     # Update the layout
+#     fig.update_layout(
+#         title='Monthly Inflow vs Victoria Release (2000-2025)',
+#         xaxis_title='Year-Month',
+#         yaxis_title='Volume (MCM)',
+#         template='plotly_dark',
+#         width=1000,
+#         height=700,
+#         xaxis=dict(tickmode='array', tickvals=df['Year-Month'].astype(str).unique())
+#     )
+
+#     # Display the plot
+#     st.plotly_chart(fig)
+def plot_monthly_inflow_vs_rajarata(df, year_range):
     """
-    Plots monthly inflow versus Victoria Spillway Release over multiple years.
+    Plots monthly inflow versus Rajarata Power Release for a selected year range.
     """
-    # Ensure 'DATE' is in datetime format
     df['DATE'] = pd.to_datetime(df['DATE'])
-    # Create a 'Year-Month' column
-    df['Year-Month'] = df['DATE'].dt.to_period('M')
+    df['Year'] = df['DATE'].dt.year
+    df['Month'] = df['DATE'].dt.month
+    filtered_df = df[(df['Year'] >= year_range[0]) & (df['Year'] <= year_range[1])]
 
-    # Initialize the figure
     fig = go.Figure()
 
-    # Loop through each year-month to add traces
-    for period in df['Year-Month'].unique():
-        period_data = df[df['Year-Month'] == period]
+    # Loop through selected years
+    for year in filtered_df['Year'].unique():
+        year_data = filtered_df[filtered_df['Year'] == year]
         fig.add_trace(go.Scatter(
-            x=period_data['Year-Month'].astype(str),
-            y=period_data['INFLOW(MCM)'],
+            x=year_data['Month'],
+            y=year_data['INFLOW(MCM)'],
             mode='lines+markers',
-            name=f'Inflow {period}'
+            name=f'Inflow {year}'
         ))
         fig.add_trace(go.Scatter(
-            x=period_data['Year-Month'].astype(str),
-            y=period_data['VICTORIYA_SPILLWAY_RELEASE(MCM)'],
+            x=year_data['Month'],
+            y=year_data['RAJARATA_POWER_RELEASE(MCM)'],
             mode='lines+markers',
-            name=f'Victoria Release {period}',
+            name=f'Rajarata Release {year}',
             line=dict(dash='dash')
         ))
 
-    # Update the layout
     fig.update_layout(
-        title='Monthly Inflow vs Victoria Release (2000-2025)',
-        xaxis_title='Year-Month',
+        title=f'Monthly Inflow vs Rajarata Release ({year_range[0]}-{year_range[1]})',
+        xaxis_title='Month',
         yaxis_title='Volume (MCM)',
         template='plotly_dark',
         width=1000,
         height=700,
-        xaxis=dict(tickmode='array', tickvals=df['Year-Month'].astype(str).unique())
+        xaxis=dict(tickmode='array', tickvals=list(range(1, 13)), ticktext=[
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ])
     )
 
-    # Display the plot
     st.plotly_chart(fig)
 
+def plot_monthly_inflow_vs_victoriya(df, year_range):
+    """
+    Plots monthly inflow versus Victoria Spillway Release for a selected year range.
+    """
+    df['DATE'] = pd.to_datetime(df['DATE'])
+    df['Year'] = df['DATE'].dt.year
+    df['Month'] = df['DATE'].dt.month
+    filtered_df = df[(df['Year'] >= year_range[0]) & (df['Year'] <= year_range[1])]
+
+    fig = go.Figure()
+
+    # Loop through selected years
+    for year in filtered_df['Year'].unique():
+        year_data = filtered_df[filtered_df['Year'] == year]
+        fig.add_trace(go.Scatter(
+            x=year_data['Month'],
+            y=year_data['INFLOW(MCM)'],
+            mode='lines+markers',
+            name=f'Inflow {year}'
+        ))
+        fig.add_trace(go.Scatter(
+            x=year_data['Month'],
+            y=year_data['VICTORIYA_SPILLWAY_RELEASE(MCM)'],
+            mode='lines+markers',
+            name=f'Victoria Release {year}',
+            line=dict(dash='dash')
+        ))
+
+    fig.update_layout(
+        title=f'Monthly Inflow vs Victoria Release ({year_range[0]}-{year_range[1]})',
+        xaxis_title='Month',
+        yaxis_title='Volume (MCM)',
+        template='plotly_dark',
+        width=1000,
+        height=700,
+        xaxis=dict(tickmode='array', tickvals=list(range(1, 13)), ticktext=[
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ])
+    )
+
+    st.plotly_chart(fig)
 
 # def plot_monthly_inflow_vs_rajarata():
 #     fig = go.Figure()

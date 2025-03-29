@@ -11,13 +11,13 @@ from utils import(
     plot_yearly_comparison,
     display_correlation_matrix,
     plot_seasonal_releases,
-    plot_inflow_vs_release 
+    plot_inflow_vs_release ,
+    plot_inflow_vs_release_dam
 )
 
-st.set_page_config(page_title="Optimization of water diversity to Rajarata from Polgolla", page_icon="🌊", layout="wide")
-#st.title("📊 Optimization of water diversity to Rajarata from Polgolla 🌊")
+st.set_page_config(page_title="Optimization of water diversity to Rajarata from Polgolla", page_icon="🌊", layout="wide")
 st.title("📊 Water Release Analysis: Addressing Water Distribution Challenges in the Rajarata District of Sri Lanka 🌊")
-    
+
 def add_background_image(image_path):
     with open(image_path, "rb") as image_file:
         encoded_image = base64.b64encode(image_file.read()).decode()
@@ -35,20 +35,16 @@ def add_background_image(image_path):
         unsafe_allow_html=True,
     )
 
-# Add a background image
-#add_background_image('static/Polgolla-diversion-dam.png')
 add_background_image('static/polgolla-dam-kandy-sri-lanka.jpg')
-# Load your dataset
+
 @st.cache_data
 def load_data():
-    # Replace 'your_dataset.csv' with the path to your actual data file
     data = pd.read_csv('data/hydrodata_polgolla_processed_2000-2025_monthly_data.csv')
     data['DATE'] = data['DATE'].str.strip()
     return data
 
 df = load_data()
 
-# Data Preprocessing
 df['DATE'] = pd.to_datetime(df['DATE'], format='%m/%d/%Y')
 df['YEAR'] = df['YEAR'].astype(int)
 df['MONTH'] = df['MONTH'].astype(int)
@@ -64,40 +60,31 @@ def get_season(month):
         return 'Maha'
 df['SEASON'] = df['MONTH'].apply(get_season)
 
-# Add season column
-# def get_season(month):
-#     if month in [12, 1, 2]:
-#         return 'Winter'
-#     elif month in [3, 4, 5]:
-#         return 'Spring'
-#     elif month in [6, 7, 8]:
-#         return 'Summer'
-#     else:
-#         return 'Fall'
-
 st.markdown(
     """
     <style>
     .stTabs [data-baseweb="tab-list"] {
-        background-color: rgba(0, 0, 0, 0.7); /* Dark overlay for contrast */
+        background-color: rgba(0, 0, 0, 0.7); 
         border-radius: 12px; 
         padding: 10px;
     }
     .stTabs [data-baseweb="tab"] {
-        color: #ffffff; /* Text color */
-        font-size: 18px; /* Larger text */
+        color: #ffffff;
+        font-size: 18px;
         font-weight: bold;
         margin-right: 10px;
     }
     .stTabs [data-baseweb="tab"]:hover {
-        background-color: rgba(255, 255, 255, 0.2); /* Hover effect */
+        background-color: rgba(255, 255, 255, 0.2);
         border-radius: 8px;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
+    "Home",
     "Time Series Analysis",
     "Rajarata vs Victoriya Releases",
     "Monthly Average Releases",
@@ -106,24 +93,80 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "Seasonal Water Releases",
     "Inflow vs Release Analysis"
 ])
+
+
 with tab1:
-    plot_time_series(df)
+    # Title
+    st.markdown("<h1 style='text-align: center; color: #1f4e79;'>Polgolla Dam Water Distribution Analysis</h1>", unsafe_allow_html=True)
+
+    # Main Content Section
+    col1, col2 = st.columns([3, 1])  # Wider text area, narrower image column
+
+    with col1:
+        st.markdown("""
+        <div style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+        <h3>Introduction to Polgolla Dam</h3>
+        The Polgolla Dam is a vital water management structure in Sri Lanka.</br>
+        From Polgolla Dam, water is distributed for two main purposes;</br>
+        
+        - Distribution to the Rajarata area (Diverted through the Ukuwela Powerhouse )
+        - Release to the Victoria Dam
+        
+        <h3>Problem Statement</h3>
+        Rajarata area in Sri Lanka experiences relatively low annual rainfall.
+
+        The release of water to Rajarata is inconsistent, despite high inflows in some months.
+
+        Insufficient water availability affects on
+
+        - Agriculture
+        - Human consumption
+        - Livestock
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.image("static/Picture1.jpg", caption="Polgolla Dam Structure", use_column_width=True)
+
+    # Regional Water Distribution Section
+    st.markdown("### Regional Water Distribution Network")
+    st.image("static/Picture2.jpg", caption="Water Distribution Network", use_column_width=True)
+
+    st.markdown("""
+    This network illustrates how water from Polgolla Dam is distributed between the Rajarata irrigation system and the Victoria Dam, highlighting the critical water management infrastructure of the region.
+    """)
 
 with tab2:
-    plot_rajarata_vs_victoriya(df)
+    plot_time_series(df)
 
 with tab3:
-    plot_monthly_avg_releases(df)
-    plot_monthly_inflow_vs_rajarata(df)
-    plot_monthly_inflow_vs_victoriya(df)
+    plot_rajarata_vs_victoriya(df)
 
 with tab4:
-    plot_yearly_comparison(df)
+    plot_monthly_avg_releases(df)
+    
+    # Year range selection with two select boxes
+    min_year = int(df['DATE'].dt.year.min())
+    max_year = int(df['DATE'].dt.year.max())
+
+    start_year = st.selectbox("Start Year", list(range(min_year, max_year + 1)), index=list(range(min_year, max_year + 1)).index(2000))
+    end_year = st.selectbox("End Year", list(range(min_year, max_year + 1)), index=list(range(min_year, max_year + 1)).index(2025))
+
+    plot_inflow_vs_release_dam(df, (start_year, end_year), 'RAJARATA_POWER_RELEASE(MCM)', 'Monthly Inflow vs Rajarata Release')
+    plot_inflow_vs_release_dam(df, (start_year, end_year), 'VICTORIYA_SPILLWAY_RELEASE(MCM)', 'Monthly Inflow vs Victoria Release')
+
+                                     
+    # plot_monthly_inflow_vs_rajarata(df)
+    # plot_monthly_inflow_vs_victoriya(df)
 
 with tab5:
-    display_correlation_matrix(df)
+    plot_yearly_comparison(df)
+
 with tab6:
-    plot_seasonal_releases(df)
+    display_correlation_matrix(df)
 
 with tab7:
+    plot_seasonal_releases(df)
+
+with tab8:
     plot_inflow_vs_release(df)

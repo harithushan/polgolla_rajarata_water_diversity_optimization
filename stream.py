@@ -129,6 +129,8 @@ with tab1:
         st.image("static/Picture1.jpg", caption="Polgolla Dam Structure", use_column_width=True)
 
     # Regional Water Distribution Section
+    st.markdown("### Schematic diagram of Mahaweli multipurpose water resources")
+    st.image("static/cascade_Dam.jpg", caption="Schematic diagram of Mahaweli multipurpose water resources", use_column_width=True)
     st.markdown("### Regional Water Distribution Network")
     st.image("static/Picture2.jpg", caption="Water Distribution Network", use_column_width=True)
 

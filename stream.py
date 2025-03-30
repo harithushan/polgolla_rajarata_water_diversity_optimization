@@ -12,7 +12,8 @@ from utils import(
     display_correlation_matrix,
     plot_seasonal_releases,
     plot_inflow_vs_release ,
-    plot_inflow_vs_release_dam
+    plot_inflow_vs_release_dam,
+    plot_filtered_inflow_vs_release
 )
 
 st.set_page_config(page_title="Optimization of water diversity to Rajarata from Polgolla", page_icon="🌊", layout="wide")
@@ -149,6 +150,8 @@ with tab4:
 
     plot_inflow_vs_release_dam(df, (start_year, end_year), 'RAJARATA_POWER_RELEASE(MCM)', 'Monthly Inflow vs Rajarata Release')
     plot_inflow_vs_release_dam(df, (start_year, end_year), 'VICTORIYA_SPILLWAY_RELEASE(MCM)', 'Monthly Inflow vs Victoria Release')                               
+    plot_filtered_inflow_vs_release(df, (start_year, end_year), 'RAJARATA_POWER_RELEASE(MCM)', 'Monthly Inflow vs Rajarata Release')
+    plot_filtered_inflow_vs_release(df, (start_year, end_year), 'VICTORIYA_SPILLWAY_RELEASE(MCM)', 'Monthly Inflow vs Victoria Release')                               
     # plot_monthly_inflow_vs_rajarata(df)
     # plot_monthly_inflow_vs_victoriya(df)
 

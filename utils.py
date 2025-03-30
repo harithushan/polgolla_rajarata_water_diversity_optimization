@@ -106,7 +106,71 @@ def plot_inflow_vs_release_dam(df, year_range, release_col, title):
         title=f'{title} ({year_range[0]}-{year_range[1]})',
         xaxis_title='Year-Month',
         yaxis_title='Volume (MCM)',
-        template='plotly_dark',
+        template='plotly_white',#'plotly_dark',
+        width=1000,
+        height=700,
+        xaxis=dict(type='category', tickangle=45)
+    )
+
+    st.plotly_chart(fig)
+def plot_filtered_inflow_vs_release(df, year_range, release_col, title):
+    df['DATE'] = pd.to_datetime(df['DATE'])
+    df['Year'] = df['DATE'].dt.year
+    df['Month'] = df['DATE'].dt.month
+    df['Year-Month'] = df['DATE'].dt.strftime('%Y-%m')
+
+    filtered_df = df[(df['Year'] >= year_range[0]) & (df['Year'] <= year_range[1])]
+    filtered_df = filtered_df[(filtered_df['INFLOW(MCM)'] > 72.576) & (filtered_df[release_col] < 72.576)]
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=filtered_df['Year-Month'],
+        y=filtered_df['INFLOW(MCM)'],
+        mode='lines+markers',
+        name='Inflow (> 72.576 MCM)',
+        line=dict(color='blue')
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=filtered_df['Year-Month'],
+        y=filtered_df[release_col],
+        mode='lines+markers',
+        name=f"{title.split('vs ')[-1].strip()} (< 72.576 MCM)",
+        line=dict(dash='dash', color='green')
+    ))
+
+    fig.add_shape(type="line",
+                  x0=filtered_df['Year-Month'].min(), x1=filtered_df['Year-Month'].max(),
+                  y0=145.152, y1=145.152,
+                  line=dict(color="red", width=2, dash="dot"))
+    
+    fig.add_shape(type="line",
+                  x0=filtered_df['Year-Month'].min(), x1=filtered_df['Year-Month'].max(),
+                  y0=72.576, y1=72.576,
+                  line=dict(color="black", width=2, dash="dot"))
+
+    fig.add_annotation(
+        x=filtered_df['Year-Month'].max(), y=145.152,
+        text="Normal Max Flow (145.152 MCM)",
+        showarrow=False,
+        font=dict(color="red", size=12),
+        xanchor="left"
+    )
+
+    fig.add_annotation(
+        x=filtered_df['Year-Month'].max(), y=72.576,
+        text="Threshold Flow (72.576 MCM)",
+        showarrow=False,
+        font=dict(color="black", size=12),
+        xanchor="left"
+    )
+
+    fig.update_layout(
+        title=f'{title} ({year_range[0]}-{year_range[1]}) - Filtered',
+        xaxis_title='Year-Month',
+        yaxis_title='Volume (MCM)',
+        template='plotly_white', 
         width=1000,
         height=700,
         xaxis=dict(type='category', tickangle=45)

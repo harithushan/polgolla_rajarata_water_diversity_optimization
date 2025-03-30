@@ -86,8 +86,8 @@ st.markdown(
 
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
     "Home",
-    "Correlation Matrix",
     "Analysis over Time",
+    "Correlation Matrix",
     "Rajarata vs Victoriya Releases",
     "Monthly Average Releases",
     "Yearly Comparison",
@@ -133,11 +133,10 @@ with tab1:
     st.image("static/Picture2.jpg", caption="Water Distribution tunnel", use_column_width=True)
 
 with tab2:
-    display_correlation_matrix(df)
-    
+    plot_time_series(df)
 
 with tab3:
-    plot_time_series(df)
+    display_correlation_matrix(df)
     
 with tab4:
     plot_rajarata_vs_victoriya(df)

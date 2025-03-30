@@ -107,7 +107,7 @@ def plot_inflow_vs_release_dam(df, year_range, release_col, title):
         xaxis_title='Year-Month',
         yaxis_title='Volume (MCM)',
         template='plotly_white',#'plotly_dark',
-        width=1000,
+        width=2000,
         height=700,
         xaxis=dict(type='category', tickangle=45)
     )
@@ -171,7 +171,7 @@ def plot_filtered_inflow_vs_release(df, year_range, release_col, title):
         xaxis_title='Year-Month',
         yaxis_title='Volume (MCM)',
         template='plotly_white', 
-        width=1000,
+        width= 2000,
         height=700,
         xaxis=dict(type='category', tickangle=45)
     )

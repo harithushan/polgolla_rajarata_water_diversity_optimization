@@ -86,11 +86,11 @@ st.markdown(
 
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
     "Home",
+    "Correlation Matrix",
     "Analysis over Time",
     "Rajarata vs Victoriya Releases",
     "Monthly Average Releases",
     "Yearly Comparison",
-    "Correlation Matrix",
     "Seasonal Water Releases",
     "Inflow vs Release Analysis"
 ])
@@ -133,15 +133,21 @@ with tab1:
     st.image("static/Picture2.jpg", caption="Water Distribution tunnel", use_column_width=True)
 
 with tab2:
-    plot_time_series(df)
+    display_correlation_matrix(df)
+    
 
 with tab3:
+    plot_time_series(df)
+    
+with tab4:
     plot_rajarata_vs_victoriya(df)
 
-with tab4:
+
+with tab5:
+    
     plot_monthly_avg_releases(df)
     
-    # Year range selection with two select boxes
+    # Year range
     min_year = int(df['DATE'].dt.year.min())
     max_year = int(df['DATE'].dt.year.max())
 
@@ -155,11 +161,8 @@ with tab4:
     # plot_monthly_inflow_vs_rajarata(df)
     # plot_monthly_inflow_vs_victoriya(df)
 
-with tab5:
-    plot_yearly_comparison(df)
-
 with tab6:
-    display_correlation_matrix(df)
+    plot_yearly_comparison(df)
 
 with tab7:
     plot_seasonal_releases(df)

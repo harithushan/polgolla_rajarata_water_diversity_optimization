@@ -96,11 +96,9 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
 
 
 with tab1:
-    # Title
     st.markdown("<h1 style='text-align: center; color: #1f4e79;'>Polgolla Dam Water Distribution Analysis</h1>", unsafe_allow_html=True)
 
-    # Main Content Section
-    col1, col2 = st.columns([3, 1])  # Wider text area, narrower image column
+    col1, col2 = st.columns([3, 1])
 
     with col1:
         st.markdown("""
@@ -128,15 +126,10 @@ with tab1:
     with col2:
         st.image("static/Picture1.jpg", caption="Polgolla Dam Structure", use_column_width=True)
 
-    # Regional Water Distribution Section
     st.markdown("### Schematic diagram of Mahaweli multipurpose water resources")
     st.image("static/cascade_Dam.jpg", caption="Schematic diagram of Mahaweli multipurpose water resources", use_column_width=True)
     st.markdown("### Regional Water Distribution Network")
-    st.image("static/Picture2.jpg", caption="Water Distribution Network", use_column_width=True)
-
-    st.markdown("""
-    This network illustrates how water from Polgolla Dam is distributed between the Rajarata irrigation system and the Victoria Dam, highlighting the critical water management infrastructure of the region.
-    """)
+    st.image("static/Picture2.jpg", caption="Water Distribution tunnel", use_column_width=True)
 
 with tab2:
     plot_time_series(df)
@@ -155,9 +148,7 @@ with tab4:
     end_year = st.selectbox("End Year", list(range(min_year, max_year + 1)), index=list(range(min_year, max_year + 1)).index(2025))
 
     plot_inflow_vs_release_dam(df, (start_year, end_year), 'RAJARATA_POWER_RELEASE(MCM)', 'Monthly Inflow vs Rajarata Release')
-    plot_inflow_vs_release_dam(df, (start_year, end_year), 'VICTORIYA_SPILLWAY_RELEASE(MCM)', 'Monthly Inflow vs Victoria Release')
-
-                                     
+    plot_inflow_vs_release_dam(df, (start_year, end_year), 'VICTORIYA_SPILLWAY_RELEASE(MCM)', 'Monthly Inflow vs Victoria Release')                               
     # plot_monthly_inflow_vs_rajarata(df)
     # plot_monthly_inflow_vs_victoriya(df)
 
